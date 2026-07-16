@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Calculadora de Juros Compostos — calcule a atualização financeira de investimentos com facilidade e visualize o crescimento do seu capital ao longo do tempo." />
+  <title>Calculadora de Juros Compostos</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="bg-animation">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <header class="header">
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-icon">📈</span>
+        <span class="logo-text">FinCalc</span>
+      </div>
+      <nav class="nav">
+        <a href="#calculator" class="nav-link">Calculadora</a>
+        <a href="#results" class="nav-link">Resultados</a>
+        <a href="#about" class="nav-link">Sobre</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-content">
+        <span class="badge">💰 Atualização Financeira</span>
+        <h1 class="hero-title">
+          Calculadora de<br />
+          <span class="gradient-text">Juros Compostos</span>
+        </h1>
+        <p class="hero-subtitle">
+          Simule o crescimento do seu capital com precisão. Veja quanto seu dinheiro renderá ao longo do tempo com o poder dos juros compostos.
+        </p>
+        <a href="#calculator" class="hero-cta">Calcular agora →</a>
+      </div>
+      <div class="hero-visual">
+        <div class="floating-card card-1">
+          <span class="card-label">Rendimento Total</span>
+          <span class="card-value" id="hero-rendimento">R$ 0,00</span>
+        </div>
+        <div class="floating-card card-2">
+          <span class="card-label">Montante Final</span>
+          <span class="card-value" id="hero-montante">R$ 0,00</span>
+        </div>
+        <div class="floating-card card-3">
+          <span class="card-label">Crescimento</span>
+          <span class="card-value" id="hero-crescimento">0,00%</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Calculator Section -->
+    <section class="section" id="calculator">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Simulador</h2>
+          <p class="section-subtitle">Preencha os dados para calcular seus juros compostos</p>
+        </div>
+
+        <div class="calc-grid">
+          <!-- Form -->
+          <div class="card form-card">
+            <h3 class="card-title">Dados do Investimento</h3>
+
+            <div class="form-group">
+              <label for="capital" class="form-label">
+                <span class="label-icon">💵</span>
+                Capital Inicial (R$)
+              </label>
+              <div class="input-wrapper">
+                <span class="input-prefix">R$</span>
+                <input type="number" id="capital" class="form-input" placeholder="1.000,00" min="0" step="0.01" value="1000" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="taxa" class="form-label">
+                <span class="label-icon">📊</span>
+                Taxa de Juros (%)
+              </label>
+              <div class="input-wrapper">
+                <input type="number" id="taxa" class="form-input" placeholder="1,00" min="0" step="0.01" value="1" />
+                <span class="input-suffix">%</span>
+              </div>
+              <div class="radio-group">
+                <label class="radio-label">
+                  <input type="radio" name="periodo-taxa" id="taxa-mensal" value="mensal" checked />
+                  <span class="radio-custom"></span>
+                  Mensal
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="periodo-taxa" id="taxa-anual" value="anual" />
+                  <span class="radio-custom"></span>
+                  Anual
+                </label>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="tempo" class="form-label">
+                <span class="label-icon">⏳</span>
+                Período
+              </label>
+              <div class="input-wrapper">
+                <input type="number" id="tempo" class="form-input" placeholder="12" min="1" step="1" value="12" />
+                <span class="input-suffix" id="suffix-tempo">meses</span>
+              </div>
+              <div class="radio-group">
+                <label class="radio-label">
+                  <input type="radio" name="periodo-tempo" id="tempo-meses" value="meses" checked />
+                  <span class="radio-custom"></span>
+                  Meses
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="periodo-tempo" id="tempo-anos" value="anos" />
+                  <span class="radio-custom"></span>
+                  Anos
+                </label>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="aporte" class="form-label">
+                <span class="label-icon">➕</span>
+                Aporte Mensal (opcional, R$)
+              </label>
+              <div class="input-wrapper">
+                <span class="input-prefix">R$</span>
+                <input type="number" id="aporte" class="form-input" placeholder="0,00" min="0" step="0.01" value="0" />
+              </div>
+            </div>
+
+            <button id="btn-calcular" class="btn-primary" onclick="calcular()">
+              <span>Calcular</span>
+              <span class="btn-arrow">→</span>
+            </button>
+
+            <button id="btn-limpar" class="btn-secondary" onclick="limpar()">
+              Limpar campos
+            </button>
+          </div>
+
+          <!-- Results Panel -->
+          <div class="results-panel" id="results">
+            <div class="card result-card highlight-card">
+              <div class="result-header">
+                <span class="result-icon">🏦</span>
+                <span class="result-label">Montante Final</span>
+              </div>
+              <div class="result-value" id="result-montante">R$ 0,00</div>
+              <div class="result-sub" id="result-crescimento-pct">+0,00% de crescimento</div>
+            </div>
+
+            <div class="results-row">
+              <div class="card result-card">
+                <div class="result-header">
+                  <span class="result-icon">💼</span>
+                  <span class="result-label">Capital Inicial</span>
+                </div>
+                <div class="result-value sm" id="result-capital">R$ 0,00</div>
+              </div>
+              <div class="card result-card">
+                <div class="result-header">
+                  <span class="result-icon">📈</span>
+                  <span class="result-label">Juros Ganhos</span>
+                </div>
+                <div class="result-value sm green" id="result-juros">R$ 0,00</div>
+              </div>
+            </div>
+
+            <div class="results-row" id="row-aportes" style="display:none">
+              <div class="card result-card">
+                <div class="result-header">
+                  <span class="result-icon">➕</span>
+                  <span class="result-label">Total Aportado</span>
+                </div>
+                <div class="result-value sm" id="result-aportes">R$ 0,00</div>
+              </div>
+              <div class="card result-card">
+                <div class="result-header">
+                  <span class="result-icon">🎯</span>
+                  <span class="result-label">Juros sobre Aportes</span>
+                </div>
+                <div class="result-value sm green" id="result-juros-aportes">R$ 0,00</div>
+              </div>
+            </div>
+
+            <!-- Formula Display -->
+            <div class="card formula-card">
+              <h4 class="formula-title">📐 Fórmula Utilizada</h4>
+              <div class="formula-box" id="formula-display">
+                <p class="formula-text">M = C × (1 + i)ⁿ</p>
+                <div class="formula-legend">
+                  <span><b>M</b> = Montante</span>
+                  <span><b>C</b> = Capital inicial</span>
+                  <span><b>i</b> = Taxa de juros</span>
+                  <span><b>n</b> = Período</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chart Section -->
+        <div class="card chart-card" id="chart-section" style="display:none">
+          <div class="chart-header">
+            <h3 class="card-title">📊 Evolução do Capital</h3>
+            <div class="chart-legend">
+              <span class="legend-item"><span class="legend-dot blue"></span>Montante</span>
+              <span class="legend-item"><span class="legend-dot green"></span>Juros</span>
+              <span class="legend-item"><span class="legend-dot gray"></span>Capital Investido</span>
+            </div>
+          </div>
+          <div class="chart-wrapper">
+            <canvas id="grafico"></canvas>
+          </div>
+        </div>
+
+        <!-- Table Section -->
+        <div class="card table-card" id="table-section" style="display:none">
+          <div class="table-header">
+            <h3 class="card-title">📋 Tabela de Evolução</h3>
+            <button class="btn-export" onclick="exportarCSV()">⬇ Exportar CSV</button>
+          </div>
+          <div class="table-wrapper">
+            <table class="data-table" id="tabela-evolucao">
+              <thead>
+                <tr>
+                  <th>Período</th>
+                  <th>Capital + Aportes</th>
+                  <th>Juros do Período</th>
+                  <th>Juros Acumulados</th>
+                  <th>Montante</th>
+                </tr>
+              </thead>
+              <tbody id="tabela-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="section about-section" id="about">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Sobre o Projeto</h2>
+          <p class="section-subtitle">Entenda como funcionam os juros compostos</p>
+        </div>
+        <div class="about-grid">
+          <div class="card about-card">
+            <span class="about-icon">📘</span>
+            <h3>O que são Juros Compostos?</h3>
+            <p>Juros compostos são calculados sobre o capital inicial mais os juros acumulados nos períodos anteriores. É o chamado "juros sobre juros", fazendo com que o montante cresça de forma exponencial.</p>
+          </div>
+          <div class="card about-card">
+            <span class="about-icon">🧮</span>
+            <h3>Como calcular?</h3>
+            <p>A fórmula básica é <strong>M = C × (1 + i)ⁿ</strong>, onde M é o montante final, C é o capital inicial, i é a taxa de juros por período e n é o número de períodos.</p>
+          </div>
+          <div class="card about-card">
+            <span class="about-icon">💡</span>
+            <h3>Por que investir cedo?</h3>
+            <p>O tempo é o maior aliado dos juros compostos. Quanto mais cedo você investir, mais tempo o capital terá para crescer, multiplicando os rendimentos de forma exponencial.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="logo-icon">📈</span>
+        <span class="logo-text">FinCalc</span>
+      </div>
+      <p class="footer-text">Desenvolvido como projeto acadêmico — Calculadora de Juros Compostos</p>
+      <p class="footer-version">v1.0.0</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
